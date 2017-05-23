@@ -1,4 +1,6 @@
 
+// TODO logf, key, repeated key, const versions, stderr
+
 #include "../Log-YAML.hpp"
 
 #define CATCH_CONFIG_MAIN
@@ -127,8 +129,18 @@ TEST_CASE("vector", "[Log]")
             string("  \"0\": [\"a\", \"b\"]\n"));
   }
 
-  // TODO logf, key, repeated key, const versions
-  // TODO escape strings
+}
+
+TEST_CASE("Escape", "[Log]")
+{
+  Log::Log log("log", true);
+
+  SECTION("escape") {
+    REQUIRE(log.log((char *)"\"\n", (char *)"\"\n") ==
+            string("  \"\\\"\\n\": \"\\\"\\n\"\n"));
+    REQUIRE(log.log(string("\"\n"), string("\"\n")) ==
+            string("  \"\\\"\\n\": \"\\\"\\n\"\n"));
+  }
 }
 
 TEST_CASE("Map", "[Log]")

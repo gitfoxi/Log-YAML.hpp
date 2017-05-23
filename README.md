@@ -20,13 +20,13 @@ Example
     log.log(9);
     log.log(11e-3);
     log.log("doh");
-    log.log(3.0, key="x");
-    log.log(1, key="x");
-    log.log("doh", key="x");
+    log.log("x", 3.0);
+    log.log("x", 1);
+    log.log("x", "doh");
     log.open("sub");
-    log.log(3.0, key="x");
-    log.log(1, key="x");
-    log.log("doh", key="x");
+    log.log("x", 3.0);
+    log.log("x", 1);
+    log.log("x", "doh");
     log.close();
     log.close(); // oops. do something sane anyway
     log.log(7);
@@ -58,6 +58,7 @@ Above, the object is created then dumped all at once. Often you want to send
 your logs out, line by line, as they're created.
 
     Log.log("log");
+    cerr << log.head();
     cerr << log.int(9);
 
 ### Auto output to stderr with tagg

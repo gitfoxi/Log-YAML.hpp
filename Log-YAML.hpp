@@ -3,6 +3,7 @@
 #define _LOG_H
 
 // TODO logf -- like printf
+// TODO more templates
 
 #include <algorithm>
 #include <cassert>
