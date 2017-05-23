@@ -5,6 +5,7 @@
 // TODO logf -- like printf
 // TODO more templates
 
+// TODO fewer includes
 #include <algorithm>
 #include <cassert>
 #include <cstdarg>
@@ -17,6 +18,8 @@
 #include <stack>
 #include <string>
 #include <vector>
+
+#include <boost/type_traits.hpp>
 
 namespace Log {
 
@@ -235,20 +238,9 @@ namespace Log {
       return _log(string(""), t);
     }
 
-    inline string log(const string& keystr, int i)
-    {
-      ostringstream o;
-      o << indent()
-        << key(keystr)
-        << " "
-        << i
-        << endl;
-      lines.push_back(o.str());
-      debug_line(o.str());
-      return o.str();
-    }
 
-    inline string log(const string& keystr, double d)
+    template<typename T>
+    inline string log_specialize(const string& keystr, T d, const boost::true_type&)
     {
       ostringstream o;
       o << indent()
@@ -261,13 +253,23 @@ namespace Log {
       return o.str();
     }
 
+    template<typename T>
+    inline string log(const string& keystr, const T t)
+    {
+        typedef boost::is_arithmetic<T> truth_type;
+        truth_type x;
+        return log_specialize(keystr, t, x);
+    }
+
     template <typename T>
     inline string log(T t)
     {
       return log(string(""), t);
     }
 
-    inline string log(const string& keystr, const string& str)
+    // string-like
+    template<typename T>
+    inline string log_specialize(const string& keystr, const T& str, const boost::false_type&)
     {
       ostringstream o;
       o << indent()
