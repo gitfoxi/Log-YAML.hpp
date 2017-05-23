@@ -228,19 +228,10 @@ namespace Log {
       return o.str();
     }
 
-    inline string log(const vector<const int>& vi)
-    {
-      return _log(string(""), vi);
-    }
-
-    inline string log(const vector<const double>& vd)
-    {
-      return _log(string(""), vd);
-    }
-
     template<typename T>
     inline string log(vector<T> t)
     {
+      // Vectors calling _log
       return _log(string(""), t);
     }
 
@@ -257,11 +248,6 @@ namespace Log {
       return o.str();
     }
 
-    inline string log(int i)
-    {
-      return log(string(""), i);
-    }
-
     inline string log(const string& keystr, double d)
     {
       ostringstream o;
@@ -275,9 +261,10 @@ namespace Log {
       return o.str();
     }
 
-    inline string log(double d)
+    template <typename T>
+    inline string log(T t)
     {
-      return log(string(""), d);
+      return log(string(""), t);
     }
 
     inline string log(const string& keystr, const string& str)
@@ -291,10 +278,6 @@ namespace Log {
       lines.push_back(o.str());
       debug_line(o.str());
       return o.str();
-    }
-
-    inline string log(const string& str) {
-      return log(string(""), str);
     }
 
 
