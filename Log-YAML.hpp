@@ -128,6 +128,7 @@ namespace Log {
         tstr = keystr;
       while(used_keys.top().count(tstr))
         tstr += "'";
+      used_keys.top().insert(tstr);
 
       return quoted(escaped(tstr)) + string(":");
     }

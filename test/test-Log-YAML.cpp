@@ -1,5 +1,5 @@
 
-// TODO logf, key, repeated key, const versions, stderr
+// TODO logf, const versions, stderr
 
 #include "../Log-YAML.hpp"
 
@@ -135,12 +135,44 @@ TEST_CASE("Escape", "[Log]")
 {
   Log::Log log("log", true);
 
-  SECTION("escape") {
+  SECTION("escape char*") {
     REQUIRE(log.log((char *)"\"\n", (char *)"\"\n") ==
             string("  \"\\\"\\n\": \"\\\"\\n\"\n"));
+  }
+
+  SECTION("escape string") {
     REQUIRE(log.log(string("\"\n"), string("\"\n")) ==
             string("  \"\\\"\\n\": \"\\\"\\n\"\n"));
   }
+}
+
+TEST_CASE("Key", "[Log]")
+{
+  Log::Log log("log", true);
+
+  SECTION("repeat key") {
+    log.log("a", 1);
+    REQUIRE(log.log("a", 1) ==
+            "  \"a'\": 1\n");
+  }
+
+  SECTION("anon key") {
+    REQUIRE(log.log(1) ==
+            "  \"0\": 1\n");
+    REQUIRE(log.log(1) ==
+            "  \"1\": 1\n");
+  }
+
+  SECTION("repeat key after sub") {
+    log.log("a", 1);
+    log.open("sub");
+    REQUIRE(log.log("a", 1) ==
+            "    \"a\": 1\n");
+    log.close();
+    REQUIRE(log.log("a", 1) ==
+            "  \"a'\": 1\n");
+  }
+
 }
 
 TEST_CASE("Map", "[Log]")
