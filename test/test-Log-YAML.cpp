@@ -1,5 +1,6 @@
 
-// TODO logf, const versions, stderr
+// TODO logf, const versions, stderr, generic containers
+// float INF, NAN
 
 #include "../Log-YAML.hpp"
 

@@ -172,6 +172,7 @@ namespace Log {
     }
 
     // quote strings
+    // TODO use type traits to merge with vector<string> version
     inline vector<const string> to_strings(const vector<char*>& vt)
     {
       vector<const string> r;
@@ -227,19 +228,9 @@ namespace Log {
       return o.str();
     }
 
-    inline string log(const char* const keystr, const vector<int>& vi)
-    {
-      return _log(string(keystr), vi);
-    }
-
     inline string log(const vector<const int>& vi)
     {
       return _log(string(""), vi);
-    }
-
-    inline string log(const char* const keystr, const vector<const double> vd)
-    {
-      return _log(string(keystr), vd);
     }
 
     inline string log(const vector<const double>& vd)
@@ -247,26 +238,10 @@ namespace Log {
       return _log(string(""), vd);
     }
 
-    inline string log(const char* const keystr, const vector<const string> vs)
-    {
-      return _log(string(keystr), vs);
-    }
-
     template<typename T>
     inline string log(vector<T> t)
     {
       return _log(string(""), t);
-    }
-
-    template<typename T>
-    inline string log(const char* const keystr, vector<T> t)
-    {
-      return _log(string(keystr), t);
-    }
-
-    inline string log(const vector<char*>& vs)
-    {
-      return _log(string(""), vs);
     }
 
     inline string log(const string& keystr, int i)
@@ -280,11 +255,6 @@ namespace Log {
       lines.push_back(o.str());
       debug_line(o.str());
       return o.str();
-    }
-
-    inline string log(const char* const keystr, int i)
-    {
-      return log(string(keystr), i);
     }
 
     inline string log(int i)
@@ -305,11 +275,6 @@ namespace Log {
       return o.str();
     }
 
-    inline string log(const char* const keystr, double d)
-    {
-      return log(string(keystr), d);
-    }
-
     inline string log(double d)
     {
       return log(string(""), d);
@@ -326,22 +291,6 @@ namespace Log {
       lines.push_back(o.str());
       debug_line(o.str());
       return o.str();
-    }
-
-    inline string log(const string keystr, const char* const str) {
-      return log(keystr, string(str));
-    }
-
-    inline string log(const char* const keystr, const string str) {
-      return log(string(keystr), str);
-    }
-
-    inline string log(const char* const keystr, const char* const str) {
-      return log(string(keystr), string(str));
-    }
-
-    inline string log(const char* const str) {
-      return log(string(""), string(str));
     }
 
     inline string log(const string& str) {
@@ -361,10 +310,6 @@ namespace Log {
       used_keys.push(set<const string>());
       next_anon_key_to_try.push(0);
       return o.str();
-    }
-
-    inline string open(char* str) {
-      return open(string(str));
     }
 
     inline string close()
