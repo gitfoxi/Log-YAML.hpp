@@ -2,4 +2,4 @@
 
 echo $* changed
 echo testing ...
-c++ test-Log-YAML.cpp && ./a.out
+c++ -Wall -Wextra -pedantic test-Log-YAML.cpp && ./a.out

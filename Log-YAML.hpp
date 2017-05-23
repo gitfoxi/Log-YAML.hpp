@@ -1,6 +1,6 @@
 
-#ifndef _LOG_H
-#define _LOG_H
+#ifndef _LOG_YAML_H
+#define _LOG_YAML_H
 
 // TODO logf -- like printf
 // TODO more templates
@@ -38,7 +38,7 @@ namespace Log {
     inline string indent()
     {
       ostringstream o;
-      for(int i=0; i<level; i++)
+      for(unsigned i=0; i<level; i++)
         o << "  ";
       return o.str();
     }
@@ -318,4 +318,4 @@ namespace Log {
   };
 }
 
-#endif // _LOG_H
+#endif // _LOG_YAML_H

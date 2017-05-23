@@ -14,9 +14,7 @@ Example
 
     #include<Log-YAML.hpp>
     
-    using namespace Log;
-    
-    Log log("log");
+    Log::Log log("log");
     log.log(9);
     log.log(11e-3);
     log.log("doh");
@@ -37,7 +35,7 @@ Example
 
 ### Output
 
-    "log:"
+    "log":
       "0": 9
       "1": 0.011
       "2": "doh"
@@ -61,7 +59,7 @@ your logs out, line by line, as they're created.
     cerr << log.head();
     cerr << log.int(9);
 
-### Auto output to stderr with tagg
+### Auto output to stderr with tag
 
     Log.log("log", use_stderr=true, stderr_tag="(LOG) ");
     log.int(9);
@@ -87,3 +85,29 @@ Rules
 * Keys are strings
 * Keys are unique
 * Keys assigned autmatically or manually
+
+Advice
+-------
+
+The goal is to avoid writing parsers.
+
+Try not to invent a mini language inside of a string. Its tempting sometimes to log something like "TEST PASSED - TIMESTAMP 602161095". That defeats the purpose. Instead, make an object like:
+
+    "TEST":
+      "PASSFAIL": "PASS"
+      "TIMESTAMP":  602161095
+
+FAQ
+---
+
+### Why not just use YAML with yaml-cpp?
+
+YAML optimizes for readability. But not many parsers can deal with the fact that it's fine to use a list or an object as a key value.
+
+Besides, my users have complained it's hard to build and include the monster in their simple projects.
+
+### So why not just use JSON with picojson or something?
+
+I like JSON but you have to create a whole object before outputting it. With YAML, you can output lines as they're created and if you suddenly stop it's still valid.
+
+For both YAML and JSON, ideas like where you can put a key-value pair and where you can put a list complicate the casual programmer's life and cause her to give up and invent an unparsable mini-language.

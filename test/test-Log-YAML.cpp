@@ -7,6 +7,7 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
+#include <cstdint>
 #include <iostream>
 #include <vector>
 #include <boost/assign.hpp>
@@ -222,5 +223,45 @@ TEST_CASE("Map", "[Log]")
             string("  \"1\": 1.1\n"));
     REQUIRE(log.log((char*)"a") ==
             string("  \"2\": \"a\"\n"));
+  }
+}
+
+TEST_CASE("const", "[Log]") {
+  Log::Log log("log", true);
+
+  SECTION("const int") {
+    REQUIRE(log.log((const int)1) ==
+            string("  \"0\": 1\n"));
+  }
+
+  SECTION("const unsigned") {
+    REQUIRE(log.log((const unsigned)1) ==
+            string("  \"0\": 1\n"));
+  }
+
+  SECTION("vector<const string>") {
+    vector<const string> vc;
+    const string a("a");
+    vc += a;
+    REQUIRE(log.log(vc) ==
+            string("  \"0\": [a]\n"));
+  }
+
+  SECTION("const vector<const string>") {
+    vector<const string> vc;
+    const string a("a");
+    vc += a;
+    const vector<const string> cvc(vc);
+    REQUIRE(log.log(cvc) ==
+            string("  \"0\": [a]\n"));
+  }
+
+  SECTION("const vector<long long>") {
+    vector<uint64_t> vc;
+    const uint64_t i = 1;
+    vc.push_back(i);
+    const vector<uint64_t> cvc(vc);
+    REQUIRE(log.log(cvc) ==
+            string("  \"0\": [1]\n"));
   }
 }
