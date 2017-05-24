@@ -12,7 +12,7 @@ Example
 
 ### C++
 
-    #include<Log-YAML.hpp>
+    #include "Log-YAML.hpp"
     
     Log::Log log("log");
     log.log(9);
@@ -26,7 +26,7 @@ Example
     log.log("x", 1);
     log.log("x", "doh");
     log.close();
-    log.close(); // oops. do something sane anyway
+    log.close(); // oops. do the sane thing anyway
     log.log(7);
     vector<int> v; 
     v += 1,2,3,4,5,6,7,8,9; // (using boost::assign)
@@ -52,7 +52,7 @@ Example
 
 ### Or, log as you go
 
-Above, the object is created then dumped all at once. Often you want to send
+Above, the object is created then dumped all at once. Sometimes you want to send
 your logs out, line by line, as they're created.
 
     Log.log("log");
@@ -69,6 +69,13 @@ your logs out, line by line, as they're created.
     (LOG) "log":
     (LOG)   "0": 9
     
+Install
+--------
+
+Just copy `Log-YAML.hpp` into your project and go.
+
+XXX You do need boost - TODO include `boost/type_traits.hpp` here
+
 Features
 ----------
 
@@ -76,11 +83,13 @@ Features
 * No possible run-time errors
 * No possible parsing errors
 
+(well if you can make an error, let me know ... it's a bug.)
+
 Rules
 ------
 
-* Only three scalar types: int, double and string
-* Only vectors of one scalar type
+* Only two scalar types: numeric and string
+* Lists (vectors) of one type only - no lists of objects
 * Strings are quoted
 * Keys are strings
 * Keys are unique
@@ -108,6 +117,14 @@ Besides, my users have complained it's hard to build and include the monster in 
 
 ### So why not just use JSON with picojson or something?
 
-I like JSON but you have to create a whole object before outputting it. With YAML, you can output lines as they're created and if you suddenly stop it's still valid.
+I like picojson (and even borrowed a few lines of their code -- thanks picojson!) but you have to create a whole object before outputting it. With YAML, you can output lines as they're created and if you suddenly stop it's still valid.
 
-For both YAML and JSON, ideas like where you can put a key-value pair and where you can put a list complicate the casual programmer's life and cause her to give up and invent an unparsable mini-language.
+For both YAML and JSON, restrictions on where you can put a key-value pair and where you can put a list complicate the casual programmer's life and cause her to give up and invent an unparsable mini-language instead.
+
+
+License
+--------
+
+Copyright Michael Fox 2017
+
+BSD-3

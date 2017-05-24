@@ -47,14 +47,26 @@ TEST_CASE("Scalars", "[Log]")
   }
 }
 
+TEST_CASE("set", "[Log]")
+{
+  Log::Log log("log", true);
+
+  SECTION("set int [1]") {
+    set<int> v;
+    v.insert(1);
+    REQUIRE(log.log(v) ==
+            string("  \"0\": [1]\n"));
+  }
+}
+
 TEST_CASE("vector", "[Log]")
 {
   Log::Log log("log", true);
 
   SECTION("vector int []") {
     vector<int> v;
-    REQUIRE(log.log(v) ==
-            string("  \"0\": []\n"));
+    REQUIRE(log.log("s", v) ==
+            string("  \"s\": []\n"));
   }
 
   SECTION("vector int [1]") {
@@ -244,7 +256,7 @@ TEST_CASE("const", "[Log]") {
     const string a("a");
     vc += a;
     REQUIRE(log.log(vc) ==
-            string("  \"0\": [a]\n"));
+            string("  \"0\": [\"a\"]\n"));
   }
 
   SECTION("const vector<const string>") {
@@ -253,7 +265,7 @@ TEST_CASE("const", "[Log]") {
     vc += a;
     const vector<const string> cvc(vc);
     REQUIRE(log.log(cvc) ==
-            string("  \"0\": [a]\n"));
+            string("  \"0\": [\"a\"]\n"));
   }
 
   SECTION("const vector<long long>") {

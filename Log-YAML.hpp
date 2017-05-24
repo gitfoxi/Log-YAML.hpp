@@ -13,6 +13,7 @@
 #include <exception>
 #include <iostream>
 #include <iterator>
+#include <list>
 #include <set>
 #include <sstream>
 #include <stack>
@@ -217,14 +218,15 @@ namespace Log {
       return r;
     }
 
-    template <typename T>
-    inline string _log(const string keystr, const vector<T>& t)
+    template <typename V>
+    inline string log_specialize(const string keystr, const V& t, const boost::false_type&, const boost::true_type&)
     {
+      vector<typename std::iterator_traits<typename V::const_iterator>::value_type> v(t.begin(), t.end());
       ostringstream o;
       o << indent()
         << key(keystr)
         << " "
-        << bracket(comma_sep(to_strings(t)))
+        << bracket(comma_sep(to_strings(v)))
         << endl;
       lines.push_back(o.str());
       debug_line(o.str());
@@ -232,15 +234,7 @@ namespace Log {
     }
 
     template<typename T>
-    inline string log(vector<T> t)
-    {
-      // Vectors calling _log
-      return _log(string(""), t);
-    }
-
-
-    template<typename T>
-    inline string log_specialize(const string& keystr, T d, const boost::true_type&)
+    inline string log_specialize(const string& keystr, T d, const boost::true_type&, const boost::false_type&)
     {
       ostringstream o;
       o << indent()
@@ -253,23 +247,38 @@ namespace Log {
       return o.str();
     }
 
+    // How to make a type trait:
+    // https://stackoverflow.com/a/12045843/914859
+    template <typename Container>
+    struct is_container : boost::false_type { };
+
+    template <typename T, typename S> struct is_container<std::set<T,S> > : boost::true_type { };
+    template <typename T, typename S> struct is_container<std::vector<T,S> > : boost::true_type { };
+    template <typename T, typename S> struct is_container<std::list<T,S> > : boost::true_type { };
+
     template<typename T>
     inline string log(const string& keystr, const T t)
     {
         typedef boost::is_arithmetic<T> truth_type;
+        typedef is_container<T> container_truth_type;
         truth_type x;
-        return log_specialize(keystr, t, x);
+        container_truth_type y;
+        return log_specialize(keystr, t, x, y);
     }
 
-    template <typename T>
-    inline string log(T t)
+    template<typename T>
+    inline string log(const T t)
     {
-      return log(string(""), t);
+      typedef boost::is_arithmetic<T> truth_type;
+      typedef is_container<T> container_truth_type;
+      truth_type x;
+      container_truth_type y;
+      return log_specialize(string(""), t, x, y);
     }
 
     // string-like
     template<typename T>
-    inline string log_specialize(const string& keystr, const T& str, const boost::false_type&)
+    inline string log_specialize(const string& keystr, const T& str, const boost::false_type&, const boost::false_type&)
     {
       ostringstream o;
       o << indent()
