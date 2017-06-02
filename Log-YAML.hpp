@@ -7,11 +7,8 @@
 #error "A before this one did '#define s'. Try including Log-YAML.hpp before other headers that may suck"
 #else
 
-// TODO try loading after MAPI
-// TODO logf -- like printf
-// TODO hex feature?
+// TODO hex feature? Would be cool to apply to numbers and vectors of numbers
 // TODO YAML features
-// TODO TEST --- header ... terminator
 // [ .inf, -.Inf, .NAN ]
 /* [ 1234, 0x4D2, 02333 ]   : [ Decimal int, Hexadecimal int, Octal int ]
     [ 1_230.15, 12.3015e+02 ]: [ Fixed float, Exponential float ]
@@ -233,6 +230,7 @@ typedef integral_constant<bool, false> false_type;
       // lines.clear();
       lines = vector<string>();
       lines.push_back("---\n");
+      debug_line("---\n");
       headstr = string("---\n") + open(top_key);
     }
 
