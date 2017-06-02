@@ -7,7 +7,8 @@
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 
-#include <cstdint>
+// #include <cstdint>
+#include <stdint.h>
 #include <iostream>
 #include <vector>
 #include <boost/assign.hpp>
@@ -251,6 +252,7 @@ TEST_CASE("const", "[Log]") {
             string("  \"0\": 1\n"));
   }
 
+#if 0
   SECTION("vector<const string>") {
     vector<const string> vc;
     const string a("a");
@@ -276,4 +278,5 @@ TEST_CASE("const", "[Log]") {
     REQUIRE(log.log(cvc) ==
             string("  \"0\": [1]\n"));
   }
+#endif
 }
